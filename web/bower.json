@@ -1,0 +1,47 @@
+{
+  "name": "RightpointLabs.Robot.Web",
+  "version": "1.0.0",
+  "homepage": "https://github.com/jorupp/robot",
+  "authors": [
+    "jorupp <jorupp@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.15",
+    "bootstrap-less": "~3.3.4",
+    "jquery": "~2.1.3",
+    "angular-ui-router": "~0.2.14",
+    "moment": "~2.11.2",
+    "underscore": "~1.8.3",
+    "matchmedia-ng": "~1.0.5",
+    "angular-signalr-hub": "~1.5.0",
+    "angular-bootstrap": "~0.13.2",
+    "angular-touch": "~1.4"
+  },
+  "overrides": {
+    "bootstrap-less": {
+      "main": [
+        "less/bootstrap.less",
+        "js/affix.js",
+        "js/alert.js",
+        "js/button.js",
+        "js/carousel.js",
+        "js/collapse.js",
+        "js/dropdown.js",
+        "js/modal.js",
+        "js/tooltip.js",
+        "js/popover.js",
+        "js/scrollspy.js",
+        "js/tab.js",
+        "js/transition.js"
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "RightpointLabs.ConferenceRoom.WebUI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jorupp/conference-room.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jorupp/conference-room/issues"
+  },
+  "homepage": "https://github.com/jorupp/conference-room",
+  "devDependencies": {
+    "event-stream": "^3.3.1",
+    "gulp": "^3.8.11",
+    "gulp-angular-templatecache": "^1.6.0",
+    "gulp-changed": "^1.2.1",
+    "gulp-concat": "^2.5.2",
+    "gulp-connect": "^2.2.0",
+    "gulp-debug": "^2.0.1",
+    "gulp-inject": "^1.2.0",
+    "gulp-less": "^3.0.3",
+    "gulp-minify-css": "^1.1.1",
+    "gulp-ng-annotate": "^0.5.3",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rev": "^3.0.1",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-typescript": "^2.6.0",
+    "gulp-uglify": "^1.2.0",
+    "gulp-watch": "^4.2.4",
+    "open": "0.0.5",
+    "proxy-middleware": "^0.11.1",
+    "rimraf": "^2.3.3",
+    "run-sequence": "^1.1.0",
+    "serve-static": "^1.9.2",
+    "wiredep": "^2.2.2",
+    "yargs": "^4.2.0"
+  },
+  "dependencies": {}
+}
