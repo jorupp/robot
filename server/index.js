@@ -1,44 +1,56 @@
 var net = require('net');
-var express = require('express');
-var SignalRJS = require('signalrjs');
- 
-var signalR = SignalRJS();
 
-//Create the hub connection 
-//NOTE: Server methods are defined as an object on the second argument 
-var hub = signalR.hub('robotHub', {
-    control: function (speed, angle) {
-        // send speed/angle to serial port
-        console.log('recieved', speed, angle);
-	}
-});
-
- 
-var server = express();
-server.use(signalR.createListener())
-server.use(express.static(__dirname));
-server.listen(3000);
- 
-signalR.on('CONNECTED',function(){
-	console.log('connected');
-	setInterval(function () {
-		signalR.send({time:new Date()});
-	},1000)
-});
-
-var host = '192.168.10.25';
+var host = '192.168.25.123';
 var serialPort = '900';
 var controlPort = '901';
 
 var serialClient = new net.Socket();
-serialClient.connect(host, serialPort, function () {
-    console.log('connected');
+serialClient.on('error', function(err) {
+    console.log('err serial', err);
+});
+serialClient.connect(serialPort, host, function () {
+    console.log('connected serial');
+    serialClient.write(new Buffer([128]));
+    console.log('wrote start');
+    setTimeout(function() {
+        serialClient.write(new Buffer([131]));
+        console.log('wrote safe');
+        setTimeout(function() {
+            serialClient.write(new Buffer([137, 1, 0, 0, 0]));
+            console.log('wrote drive');
+            setTimeout(function() {
+                serialClient.write(new Buffer([137, 0, 0, 0, 0]));
+                console.log('wrote no drive');
+                setTimeout(function() {
+                    serialClient.write(new Buffer([173]));
+                    console.log('wrote stop');
+                    
+                }, 500);
+            }, 500);
+        }, 100);
+    }, 100);
 });
 serialClient.on('data', function (data) {
     console.log('got data: ' + data);
-    hub.clients.all.invoke('sensorState').withArgs([])
 });
 serialClient.on('close', function () {
-    console.log('disconnected');
+    console.log('disconnected serial');
+});
+
+
+var controlClient = new net.Socket();
+controlClient.on('error', function(err) {
+    console.log('err cmd', err);
+});
+controlClient.connect(controlPort, host, function () {
+    console.log('connected cmd');
+    controlClient.write(new Buffer([0,0,1,0]));
+    console.log('wrote');
+});
+controlClient.on('data', function (data) {
+    console.log('got data cmd: ' + data);
+});
+controlClient.on('close', function () {
+    console.log('disconnected cmd');
 });
 
