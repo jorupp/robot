@@ -1,12 +1,15 @@
 var net = require('net');
 
-var app = require('express').createServer();
-var io = require('socket.io')(app);
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 app.use(express.static('public'));
-app.listen(9000);
+server.listen(9000);
 
-io.on('connection', function (socket) {
+io.on('connection', function(socket) {
+    console.log('socket.io got connection');
   socket.on('drive', function (data) {
     console.log('drive', data);
   });

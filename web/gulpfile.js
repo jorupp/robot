@@ -20,7 +20,7 @@ var plumber = function() {
     }})
 };
 var debug = require('gulp-debug');
-var proxy = require('proxy-middleware');
+var proxy = require('http-proxy-middleware');
 var url = require('url');
 var es = require('event-stream');
 var ngTemplates = require('gulp-angular-templatecache');
@@ -38,7 +38,7 @@ var TS_SCRIPT_SOURCE = 'src/**/*.ts';
 var STYLE_SOURCE = 'src/**/*.less';
 var TEMPLATES_SOURCE = ['src/**/*.html', '!src/index.html'];
 var INDEX_SOURCE = 'src/index.html';
-var PORT = 4567;
+var PORT = 4569;
 
 var tsProject = ts.createProject({
     declartionFiles: true,
@@ -213,7 +213,7 @@ gulp.task('index-release', ['scripts-release', 'styles-release', 'resources'], f
         .pipe(gulp.dest('./dist'));
 });
 
-var server = args.live ? 'http://rooms.labs.rightpoint.com' : 'http://localhost:63915'; 
+var server = args.live ? 'ws://labs.rightpoint.com:9000' : 'ws://localhost:9000'; 
 
 gulp.task('server', ['index'], function() {
     connect.server({ 
@@ -223,8 +223,8 @@ gulp.task('server', ['index'], function() {
         middleware: function(c, opt) {
             return [
                 c().use('/bower_components', c.static('./bower_components')),
-                c().use('/api', proxy(url.parse(server + '/api'))),
-                c().use('/signalr', proxy(url.parse(server + '/signalr')))
+                c().use('/', c.static('dist')),
+                c().use(proxy(server, { logLevel: 'debug', ws: true}))
             ];
         }
     });
@@ -235,8 +235,7 @@ gulp.task('server-release', ['index-release'], function() {
         root: 'dist',
         middleware: function(c, opt) {
             return [
-                c().use('/api', proxy(url.parse(server + '/api'))),
-                c().use('/signalr', proxy(url.parse(server + '/signalr')))
+                c().use(proxy(server))
             ];
         }
     });

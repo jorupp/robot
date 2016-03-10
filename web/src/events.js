@@ -2,7 +2,7 @@
     'use strict;'
 
     angular.module('app').service('EventService', [function() {
-        var socket = io.connect('http://localhost');
+        var socket = io.connect('ws://' + window.location.host);
         return {
             send: function(event, data) {
                 socket.emit(event, data);
