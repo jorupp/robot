@@ -51,6 +51,11 @@
         $scope.$watchCollection('[c.drive, c.turn]', function() {
             eventService.send('drive', { drive: self.drive, turn: self.turn });
         });
-
+        
+        ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep'].forEach(function(cmd) {
+            self[cmd] = function() {
+                eventService.send(cmd, {});
+            };
+        });
     }]);
 })();

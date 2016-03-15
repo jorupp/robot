@@ -1,7 +1,8 @@
 var fs = require('fs');
 
 var config = JSON.parse(fs.readFileSync('config.json'));
-var cn = require('./cn')(config.device);
+var ConnectionManager = require('./cn');
+var cn = new ConnectionManager(config.device);
 
 var net = require('net');
 
@@ -34,16 +35,14 @@ io.on('connection', function(socket) {
         }
         var send = new Buffer([ 137, drive >> 8, drive, turn >> 8, turn ]);
         console.log(send);
-        serialClient.write(send);
+        cn.writeSerial(send);
     });
-    socket.on('mode', function (data) {
-        console.log('mode', data);
-    });
-    socket.on('start', function (data) {
-        console.log('start', data);
-    });
-    socket.on('stop', function (data) {
-        console.log('stop', data);
+    
+    ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep'].forEach(function(cmd) {
+        socket.on(cmd, function() {
+            console.log('issuing command: ' + cmd);
+            cn[cmd]();
+        });
     });
 });
 

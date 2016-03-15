@@ -4,4 +4,14 @@
         <li>Drive: {{ c.drive }}</li>
         <li>Turn: {{ c.turn }}</li>
     </ul>
+    <div class="btn-group">
+        <button class="btn" ng-click="c.beep()">Beep</button>
+        <button class="btn" ng-click="c.reset()">Reset</button>
+        <button class="btn" ng-click="c.wakeup()">Wake Up</button>
+        <button class="btn" ng-click="c.start()">Start</button>
+        <button class="btn" ng-click="c.safe()">Safe</button>
+        <button class="btn" ng-click="c.dock()">Dock</button>
+        <button class="btn" ng-click="c.stop()">Stop</button>
+        <button class="btn" ng-click="c.off()">Off</button>
+    </div>
 </div>

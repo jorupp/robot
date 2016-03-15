@@ -4,7 +4,7 @@ var EverSocket = require('eversocket').EverSocket;
 
 module.exports = function connectionManager(deviceConfig) {
     var self = this;
-    
+
     var serialClient;
     var auxClient;
 
@@ -32,7 +32,7 @@ module.exports = function connectionManager(deviceConfig) {
         auxClient.on('data', function (data) {
             console.log('aux data: ', new Buffer(data));
         });
-        
+
         var keepAlive = null;
         var sc = serialClient;
         serialClient.on('connect', function() {
@@ -55,7 +55,7 @@ module.exports = function connectionManager(deviceConfig) {
                 keepAlive = null;
             }
         });
-        
+
         serialClient.connect(deviceConfig.serialPort, deviceConfig.host);
         auxClient.connect(deviceConfig.auxPort, deviceConfig.host);
     };
@@ -74,11 +74,26 @@ module.exports = function connectionManager(deviceConfig) {
             auxClient = null;
         }
     }
-    
-    self.writeSerial = function writeSerial(data) { 
+
+    self.writeSerial = function writeSerial(data) {
         serialClient.write(data);
     };
-    self.writeAux = function writeAux(data) { 
+    self.writeAux = function writeAux(data) {
         auxClient.write(data);
     };
+
+    function cmd() {
+        var args = Array.prototype.slice.call(arguments);
+        return function() { self.writeSerial(new Buffer(args)); }
+    }
+    self.wakeup = function() {
+        self.writeAux(new Buffer([2, 0]));
+    }
+    self.start = cmd(128);
+    self.reset = cmd(7);
+    self.stop = cmd(173, 173);
+    self.safe = cmd(131);
+    self.dock = cmd(143);
+    self.off = cmd(133);
+    self.beep = cmd(140, 3, 1, 64, 16, 141, 3);
 }
