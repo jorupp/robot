@@ -51,6 +51,10 @@
         $scope.$watchCollection('[c.drive, c.turn]', function() {
             eventService.send('drive', { drive: self.drive, turn: self.turn });
         });
+        self.status = {};
+        $scope.$on('destroy', eventService.on('status', function(status) {
+            self.status = status;
+        }));
         
         ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep'].forEach(function(cmd) {
             self[cmd] = function() {

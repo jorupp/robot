@@ -6,6 +6,9 @@
         return {
             send: function(event, data) {
                 socket.emit(event, data);
+            },
+            on: function(event, callback) {
+                return socket.on('status', callback);
             }
         }
     }]);
