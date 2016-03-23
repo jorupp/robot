@@ -96,4 +96,11 @@ module.exports = function connectionManager(deviceConfig) {
     self.dock = cmd(143);
     self.off = cmd(133);
     self.beep = cmd(140, 3, 1, 64, 16, 141, 3);
+    
+    self.fire = function() {
+        self.writeAux(new Buffer([0, 0]));
+    };
+    self.setElevation = function(value) {
+        self.writeAux(new Buffer([1, value]));
+    };
 }

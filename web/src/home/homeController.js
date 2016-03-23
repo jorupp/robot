@@ -5,6 +5,9 @@
         var self = this;
         self.drive = 0;
         self.turn = 0;
+        self.isFiring = false;
+        self.elevation = 0;
+        var elevationDelta = 0.025;
 
         function applyDeadzone(value, oldValue) {
             if (!value) {
@@ -36,20 +39,34 @@
         $interval(function() {
             var gp = navigator.getGamepads()[0];
             if (gp && gp.connected) {
-                targetTurn = applyDeadzone(gp.axes[0], targetTurn);
+                targetTurn = applyDeadzone(gp.axes[2], targetTurn);
                 targetDrive = -applyDeadzone(gp.axes[1], -targetDrive);
                 self.turn = applySmooth(targetTurn, self.turn);
                 self.drive = applySmooth(targetDrive, self.drive);
-            } else {
-                if (self.drive || self.turn) {
-                    self.drive = 0;
-                    self.turn = 0;
+                if(gp.buttons[12].pressed) {
+                    self.elevation += elevationDelta;
                 }
+                if(gp.buttons[13].pressed) {
+                    self.elevation -= elevationDelta;
+                }
+                self.elevation = Math.min(1, Math.max(-1, self.elevation));
+                self.isFiring = gp.buttons[7].pressed;
+                if(self.isFiring) {
+                    eventService.send('fire', {} );
+                }
+            } else {
+                self.drive = 0;
+                self.turn = 0;
+                self.elevation = 0;
+                self.isFiring = false;
             }
         }, 25);
 
         $scope.$watchCollection('[c.drive, c.turn]', function() {
             eventService.send('drive', { drive: self.drive, turn: self.turn });
+        });
+        $scope.$watch('c.elevation', function() {
+            eventService.send('setElevation', { value: self.elevation });
         });
         
         ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep'].forEach(function(cmd) {
