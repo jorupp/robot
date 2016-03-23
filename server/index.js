@@ -48,3 +48,6 @@ io.on('connection', function(socket) {
 
 io.on('connection', updateConnection);
 io.on('disconnect', updateConnection);
+io.on('status', function(status) {
+    io.emit('status', status);
+});
