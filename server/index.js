@@ -44,6 +44,18 @@ io.on('connection', function(socket) {
             cn[cmd]();
         });
     });
+    
+    socket.on('fire', function() {
+        console.log('firing');
+        cn.fire();
+    });
+    socket.on('setElevation', function(data) {
+        var min = 40;
+        var max = 140;
+        var value = ((max - min) / 2 * -data.value) + min + (max - min) / 2;
+        console.log('set elevation', data.value, value);
+        cn.setElevation(value);
+    })
 });
 
 io.on('connection', updateConnection);
