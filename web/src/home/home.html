@@ -18,10 +18,10 @@
     </div>
     <div>
         Battery charge:
-        <span class="progress">
-            <span class="progress-bar" ng-class="{ 'progress-bar-success': !!c.status.code, 'progress-bar-warning': !c.status.code }" ng-style="{ width: ((c.status.batteryCharge / (c.status.batteryCapacity || 1)) * 100 + '%') }">
-            </span>
-        </span>
+        <div class="progress">
+            <div class="progress-bar" ng-class="{ 'progress-bar-success': !!c.status.chargingState, 'progress-bar-warning': !c.status.chargingState }" ng-style="{ width: ((c.status.batteryCharge / (c.status.batteryCapacity || 1)) * 100 + '%') }">
+            </div>
+        </div>
     </div>
     <div>
         <pre>{{ c.status | json }}</pre>
