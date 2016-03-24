@@ -10,7 +10,33 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var EverSocket = require('eversocket').EverSocket;
+var MjpegProxy = require('mjpeg-proxy').MjpegProxy;
 
+// proxy the live stream (only make the Pi send a single stream - we'll multiplex it here)
+app.get('/live.jpg', new MjpegProxy(config.camera.streamUrl).proxyRequest);
+
+// proxy the snapshot conventionally
+app.get('/static.jpg', function(req, res) {
+    var pReq = http.createClient(80, request.headers['host']).request('GET', config.camera.staticUrl, req.headers);
+    pReq.on('response', function(pRes) {
+        pRes.on('data', function(data) {
+            res.write(data, 'binary');
+        });
+        pRes.on('end', function(data) {
+            res.end();
+        });
+        res.writeHead(pRes.statusCode, pRes.headers);
+    });
+    pReq.on('data', function(data) {
+        pReq.write(chunk, 'binary');
+    })
+    pReq.on('end', function() {
+        pReq.end();
+    })
+});
+
+// serve static files
 app.use(express.static('public'));
 server.listen(9000);
 
