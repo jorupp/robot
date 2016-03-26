@@ -65,7 +65,7 @@ io.on('connection', function(socket) {
         cn.writeSerial(send);
     });
     
-    ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep'].forEach(function(cmd) {
+    ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep', 'auxPowerOn', 'auxPowerOff', 'chargeSong', 'ironManSong' ].forEach(function(cmd) {
         socket.on(cmd, function() {
             console.log('issuing command: ' + cmd);
             cn[cmd]();

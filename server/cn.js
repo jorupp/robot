@@ -156,6 +156,10 @@ function ConnectionManager(deviceConfig) {
     self.dock = cmd(143);
     self.off = cmd(133);
     self.beep = cmd(140, 3, 1, 64, 16, 141, 3);
+    self.chargeSong = cmd(140, 4, 6, 43, 10, 48, 10, 52, 10, 55, 24, 52, 8, 55, 64, 141, 4);  // G/C/E, G, E, G - https://en.wikipedia.org/wiki/Charge_(fanfare)
+    self.ironManSong = cmd(140, 1, 14, 35, 32, 38, 32, 38, 16, 40, 16, 40, 32, 43, 8, 42, 8, 43, 8, 42, 8, 43, 16, 38, 16, 38, 16, 40, 16, 40, 32, 141, 1);  // B D DE E GF#GF# GD DE E - http://www.onlinesheetmusic.com/iron-man-p370899.aspx
+    self.auxPowerOn = cmd(138, 2);
+    self.auxPowerOff = cmd(138, 0);
     
     self.fire = function() {
         self.writeAux(new Buffer([0, 0]));
