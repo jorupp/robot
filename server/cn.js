@@ -158,6 +158,9 @@ function ConnectionManager(deviceConfig) {
     self.beep = cmd(140, 3, 1, 64, 16, 141, 3);
     self.chargeSong = cmd(140, 4, 6, 43, 10, 48, 10, 52, 10, 55, 24, 52, 8, 55, 64, 141, 4);  // G/C/E, G, E, G - https://en.wikipedia.org/wiki/Charge_(fanfare)
     self.ironManSong = cmd(140, 1, 14, 35, 32, 38, 32, 38, 16, 40, 16, 40, 32, 43, 8, 42, 8, 43, 8, 42, 8, 43, 16, 38, 16, 38, 16, 40, 16, 40, 32, 141, 1);  // B D DE E GF#GF# GD DE E - http://www.onlinesheetmusic.com/iron-man-p370899.aspx
+    self.mario11 = cmd(140, 1, 11, 52, 16, 52, 16, 1, 16, 52, 16, 1, 16, 48, 16, 52, 16, 1, 16, 55, 16, 1, 48, 43, 16, 141, 1);  // http://www.mariopiano.com/mario-sheet-music-overworld-main-theme.html
+    self.mario12 = cmd(140, 1, 6, 36, 16, 48, 16, 33, 16, 45, 16, 34, 16, 46, 16, 141, 1);  // http://www.mariopiano.com/mario-sheet-music-underworld-theme.html
+    self.marioOver = cmd(140, 1, 11, 60, 16, 1, 32, 43, 16, 1, 32, 40, 32, 45, 22, 47, 22, 45, 22, 44, 32, 46, 32, 44, 32, 43, 16, 41, 16, 43, 64, 141, 1);  // CRRG RRE 3HABA HA@B@A@ GFHG     http://www.mariopiano.com/mario-sheet-music-game-over-sound.html
     self.auxPowerOn = cmd(138, 2);
     self.auxPowerOff = cmd(138, 0);
     
