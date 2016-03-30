@@ -76,6 +76,9 @@ function ConnectionManager(deviceConfig) {
                 serialClient.write(new Buffer([129])); // start
                 setTimeout(function() {
                     serialClient.write(new Buffer([132])); // safe mode
+                    if(keepAlive) {
+                        clearInterval(keepAlive);
+                    }
                     keepAlive = setInterval(function() {
                         // serialClient.write(new Buffer([149, 1, 35]));
                         // return;
