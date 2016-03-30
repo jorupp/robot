@@ -1,11 +1,11 @@
 {
     "device": {
-        "host": "192.168.25.123",
+        "host": "192.168.25.125",
         "serialPort": 900,
         "auxPort": 901
     },
     "camera": {
-        "streamUrl": "http://192.168.25.129:8080/?action=stream",
-        "staticUrl": "http://192.168.25.129:8080/?action=snapshot"
+        "streamUrl": "http://192.168.25.131:8080/?action=stream",
+        "staticUrl": "http://192.168.25.131:8080/?action=snapshot"
     }
 }
