@@ -15,7 +15,7 @@ var EverSocket = require('eversocket').EverSocket;
 var MjpegProxy = require('mjpeg-proxy').MjpegProxy;
 
 // proxy the live stream (only make the Pi send a single stream - we'll multiplex it here)
-app.get('/live.jpg', new MjpegProxy(config.camera.streamUrl).proxyRequest);
+// app.get('/live.jpg', new MjpegProxy(config.camera.streamUrl).proxyRequest);
 
 // proxy the snapshot conventionally
 app.get('/static.jpg', function(req, res) {
