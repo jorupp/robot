@@ -34,6 +34,12 @@
             var delta = Math.min(Math.max(value - oldValue, -maxDeltaPerInterval), maxDeltaPerInterval);
             return oldValue + delta;
         }
+        
+        var buttons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        self.buttons = {};
+        buttons.forEach(function(i) {
+            self.buttons[''+i] = false;
+        });
 
         var targetTurn = 0, targetDrive = 0;
         $interval(function() {
@@ -43,12 +49,15 @@
                 targetDrive = -applyDeadzone(gp.axes[1], -targetDrive);
                 self.turn = applySmooth(targetTurn, self.turn);
                 self.drive = applySmooth(targetDrive, self.drive);
-                if(gp.buttons[12].pressed) {
-                    self.elevation += elevationDelta;
-                }
-                if(gp.buttons[13].pressed) {
-                    self.elevation -= elevationDelta;
-                }
+                // if(gp.buttons[12].pressed) {
+                //     self.elevation += elevationDelta;
+                // }
+                // if(gp.buttons[13].pressed) {
+                //     self.elevation -= elevationDelta;
+                // }
+                buttons.forEach(function(i) {
+                    self.buttons[''+i] = gp.buttons[i].pressed;
+                });
                 self.elevation = Math.min(1, Math.max(-1, self.elevation));
                 self.isFiring = gp.buttons[7].pressed;
                 if(self.isFiring) {
@@ -67,6 +76,27 @@
         });
         $scope.$watch('c.elevation', function() {
             eventService.send('setElevation', { value: self.elevation });
+        });
+        $scope.$watch('c.buttons["6"]', function(v) {
+            if(v) eventService.send('stop', { });
+        });
+        $scope.$watch('c.buttons["4"]', function(v) {
+            if(v) eventService.send('start', { });
+        });
+        $scope.$watch('c.buttons["5"]', function(v) {
+            if(v) eventService.send('safe', { });
+        });
+        $scope.$watch('c.buttons["0"]', function(v) {
+            if(v) eventService.send('beep', { });
+        });
+        $scope.$watch('c.buttons["1"]', function(v) {
+            if(v) eventService.send('chargeSong', { });
+        });
+        $scope.$watch('c.buttons["2"]', function(v) {
+            if(v) eventService.send('mario11', { });
+        });
+        $scope.$watch('c.buttons["3"]', function(v) {
+            if(v) eventService.send('marioOver', { });
         });
         self.status = {};
         $scope.$on('destroy', eventService.on('status', function(status) {
