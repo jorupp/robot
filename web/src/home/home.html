@@ -18,13 +18,16 @@
         <button class="btn" ng-click="c.off()">Off</button>
         <button class="btn" ng-click="c.auxPowerOn()">Aux On</button>
         <button class="btn" ng-click="c.auxPowerOff()">Aux Off</button>
+        <button class="btn" ng-click="c.status()">Status</button>
+    </div>
+    <div class="btn-group">
         <button class="btn" ng-click="c.chargeSong()">Charge</button>
         <button class="btn" ng-click="c.ironManSong()">Iron Man</button>
         <button class="btn" ng-click="c.mario11()">Mario 1-1</button>
         <button class="btn" ng-click="c.mario12()">Mario 1-2</button>
         <button class="btn" ng-click="c.marioOver()">Mario Game Over</button>
     </div>
-    <div><img src="/live.jpg" height="720" width="1280"></div>
+    
     <div>
         Battery charge:
         <div class="progress">
@@ -32,7 +35,20 @@
             </div>
         </div>
     </div>
-    <div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#status" aria-controls="home" role="tab" data-toggle="tab">Status</a></li>
+        <li role="presentation"><a href="#camera" aria-controls="camera" role="tab" data-toggle="tab">Camera</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="status">
         <pre>{{ c.status | json }}</pre>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="camera">
+            <p><a href="/live.jpg" target="_blank">New Window</a></p>
+            <iframe src="/live.jpg" height="720" width="1280"></iframe>
+        </div>
     </div>
 </div>

@@ -103,7 +103,7 @@
             self.status = status;
         }));
         
-        ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep', 'auxPowerOn', 'auxPowerOff', 'chargeSong', 'ironManSong', 'mario11', 'mario12', 'marioOver'].forEach(function(cmd) {
+        ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep', 'auxPowerOn', 'auxPowerOff', 'status', 'chargeSong', 'ironManSong', 'mario11', 'mario12', 'marioOver'].forEach(function(cmd) {
             self[cmd] = function() {
                 eventService.send(cmd, {});
             };

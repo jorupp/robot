@@ -71,49 +71,29 @@ function ConnectionManager(deviceConfig) {
         var keepAlive = null;
         var sc = serialClient;
         serialClient.on('connect', function() {
-            serialClient.write(new Buffer([173, 173])); // stop
-            setTimeout(function() {
-                serialClient.write(new Buffer([129])); // start
-                setTimeout(function() {
-                    serialClient.write(new Buffer([132])); // safe mode
-                    if(keepAlive) {
-                        clearInterval(keepAlive);
-                    }
-                    keepAlive = setInterval(function() {
-                        // serialClient.write(new Buffer([149, 1, 35]));
-                        // return;
-                        self.serialWriteAndRead(new Buffer([149, 3, 2, 3, 5]), 28, function(data) {
-                            // 28 bytes
-                            var status = {
-                                irOpCode: data[0],
-                                buttons: data[1],
-                                distance: (((data[2] << 8) | data[3]) << 16) >> 16,
-                                angle: (((data[4] << 8) | data[5]) << 16) >> 16,
-                                chargingState: data[6],
-                                voltage: data[7] << 8 | data[8],
-                                current: (((data[9] << 8) | data[10]) << 16) >> 16,
-                                temperature: (data[11] << 24) >> 24,
-                                batteryCharge: data[12] << 8 | data[13],
-                                batteryCapacity: data[14] << 8 | data[15],
-                                oiMode: data[16],
-                                song: data[17],
-                                isPlayingSong: data[18] == 1,
-                                ioStreamPackets: data[19],
-                                velocity: (((data[20] << 8) | data[21]) << 16) >> 16,
-                                radius: (((data[22] << 8) | data[23]) << 16) >> 16,
-                                velocityLeft: (((data[24] << 8) | data[25]) << 16) >> 16,
-                                velocityRight: (((data[26] << 8) | data[27]) << 16) >> 16,
-                            };
-                            
-                            self.emit('status', status);
-                        }, 500);
-                    }, 1000);
-
-                }, 200);
-            }, 200)
+            console.log('got serial connection');
+            // console.log('got serial connection, sending stop/stop, start, safe mode')
+            // setTimeout(function() {
+            //     serialClient.write(new Buffer([173, 173])); // stop/stop
+            //     setTimeout(function() {
+            //         serialClient.write(new Buffer([128])); // start
+            //         setTimeout(function() {
+            //             serialClient.write(new Buffer([131])); // safe mode
+            //             if(keepAlive) {
+            //                 console.log('clearing keepalive');
+            //                 clearInterval(keepAlive);
+            //             }
+            //             console.log('enabling keepalive');
+            //             keepAlive = setInterval(function() {
+            //                 self.status();
+            //             }, 1000);
+            //         }, 200);
+            //     }, 200);
+            // }, 200);
         });
         serialClient.on('disconnect', function() {
             if(keepAlive) {
+                console.log('disabling keepalive');
                 clearInterval(keepAlive);
                 keepAlive = null;
             }
@@ -184,6 +164,34 @@ function ConnectionManager(deviceConfig) {
         }, timeout);
         queuedReads.push(read);
         self.writeSerial(data);
+    };
+    
+    self.status = function status() {
+        self.serialWriteAndRead(new Buffer([149, 3, 2, 3, 5]), 28, function(data) {
+            // 28 bytes
+            var status = {
+                irOpCode: data[0],
+                buttons: data[1],
+                distance: (((data[2] << 8) | data[3]) << 16) >> 16,
+                angle: (((data[4] << 8) | data[5]) << 16) >> 16,
+                chargingState: data[6],
+                voltage: data[7] << 8 | data[8],
+                current: (((data[9] << 8) | data[10]) << 16) >> 16,
+                temperature: (data[11] << 24) >> 24,
+                batteryCharge: data[12] << 8 | data[13],
+                batteryCapacity: data[14] << 8 | data[15],
+                oiMode: data[16],
+                song: data[17],
+                isPlayingSong: data[18] == 1,
+                ioStreamPackets: data[19],
+                velocity: (((data[20] << 8) | data[21]) << 16) >> 16,
+                radius: (((data[22] << 8) | data[23]) << 16) >> 16,
+                velocityLeft: (((data[24] << 8) | data[25]) << 16) >> 16,
+                velocityRight: (((data[26] << 8) | data[27]) << 16) >> 16,
+            };
+            
+            self.emit('status', status);
+        }, 500);
     }
 }
 
