@@ -5,7 +5,7 @@
         "auxPort": 901
     },
     "camera": {
-        "streamUrl": "http://10.10.1.202:8080/?action=stream",
-        "staticUrl": "http://10.10.1.202:8080/?action=snapshot"
+        "streamUrl": "http://10.10.1.25:8080/?action=stream",
+        "staticUrl": "http://10.10.1.25:8080/?action=snapshot"
     }
 }
