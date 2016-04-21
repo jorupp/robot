@@ -65,7 +65,7 @@ io.on('connection', function(socket) {
         cn.writeSerial(send);
     });
     
-    ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep', 'auxPowerOn', 'auxPowerOff', 'status', 'chargeSong', 'ironManSong', 'mario11', 'mario12', 'marioOver' ].forEach(function(cmd) {
+    ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep', 'auxPowerOn', 'auxPowerOff', 'status', 'chargeSong', 'ironManSong', 'mario11', 'mario12', 'marioOver', 'statusCheck' ].forEach(function(cmd) {
         socket.on(cmd, function() {
             console.log('issuing command: ' + cmd);
             cn[cmd]();
@@ -90,3 +90,7 @@ io.on('disconnect', updateConnection);
 cn.on('status', function(status) {
     io.emit('status', status);
 });
+cn.on('wifiStatus', function(status) {
+    io.emit('wifiStatus', status);
+});
+

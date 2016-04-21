@@ -8,7 +8,7 @@
                 socket.emit(event, data);
             },
             on: function(event, callback) {
-                return socket.on('status', callback);
+                return socket.on(event, callback);
             }
         }
     }]);

@@ -64,32 +64,49 @@ function ConnectionManager(deviceConfig) {
         auxClient.on('reconnect', function() {
             console.log('the serial socket reconnected following a close or timeout event');
         });
+        var alreadyAuxData = [];
         auxClient.on('data', function (data) {
-            console.log('aux data: ', new Buffer(data));
+            data = new Buffer(data);
+            console.log('aux data: ', data);
+            
+            // add this data to the buffer
+            for(var i=0; i<data.length; i++) {
+                alreadyAuxData.push(data[i]);
+            }
+            console.log('Added incoming data to aux buffer', data.length, alreadyAuxData[0], alreadyAuxData.length);
+            
+            if(alreadyAuxData[0] + 1 <= alreadyAuxData.length) {
+                var len = alreadyAuxData[0];
+                alreadyAuxData.splice(0, 1); // remove the length byte
+                if(len) {
+                    var realData = alreadyAuxData.splice(0, len);
+                    processAuxData(realData)
+                }
+            }
         });
 
         var keepAlive = null;
         var sc = serialClient;
         serialClient.on('connect', function() {
-            console.log('got serial connection');
-            // console.log('got serial connection, sending stop/stop, start, safe mode')
-            // setTimeout(function() {
-            //     serialClient.write(new Buffer([173, 173])); // stop/stop
-            //     setTimeout(function() {
-            //         serialClient.write(new Buffer([128])); // start
-            //         setTimeout(function() {
-            //             serialClient.write(new Buffer([131])); // safe mode
-            //             if(keepAlive) {
-            //                 console.log('clearing keepalive');
-            //                 clearInterval(keepAlive);
-            //             }
-            //             console.log('enabling keepalive');
-            //             keepAlive = setInterval(function() {
-            //                 self.status();
-            //             }, 1000);
-            //         }, 200);
-            //     }, 200);
-            // }, 200);
+            // console.log('got serial connection');
+            console.log('got serial connection, sending stop/stop, start, safe mode')
+            setTimeout(function() {
+                serialClient.write(new Buffer([173, 173])); // stop/stop
+                setTimeout(function() {
+                    serialClient.write(new Buffer([128])); // start
+                    setTimeout(function() {
+                        serialClient.write(new Buffer([131])); // safe mode
+                        if(keepAlive) {
+                            console.log('clearing keepalive');
+                            clearInterval(keepAlive);
+                        }
+                        console.log('enabling keepalive');
+                        keepAlive = setInterval(function() {
+                            self.status();
+                        }, 1000);
+                    }, 200);
+                }, 200);
+            }, 200);
         });
         serialClient.on('disconnect', function() {
             if(keepAlive) {
@@ -153,6 +170,9 @@ function ConnectionManager(deviceConfig) {
     self.setElevation = function(value) {
         self.writeAux(new Buffer([1, value]));
     };
+    self.statusCheck = function() {
+        self.writeAux(new Buffer([3, 0]));
+    };
 
     self.serialWriteAndRead = function serialWriteAndRead(data, expected, callback, timeout) {
         var read = {
@@ -192,6 +212,15 @@ function ConnectionManager(deviceConfig) {
             
             self.emit('status', status);
         }, 500);
+    }
+    
+    function processAuxData(data) {
+        console.log('processing aux data', data);
+        switch(data[0]) {
+            case 0:
+                self.emit('wifiStatus', { RSSI: data[1] << 24 >> 24 });
+                break;
+        }
     }
 }
 

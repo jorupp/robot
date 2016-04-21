@@ -102,8 +102,11 @@
         $scope.$on('destroy', eventService.on('status', function(status) {
             self.status = status;
         }));
+        $scope.$on('destroy', eventService.on('wifiStatus', function(status) {
+            self.wifiStatus = status;
+        }));
         
-        ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep', 'auxPowerOn', 'auxPowerOff', 'status', 'chargeSong', 'ironManSong', 'mario11', 'mario12', 'marioOver'].forEach(function(cmd) {
+        ['wakeup', 'start', 'reset', 'stop', 'safe', 'dock', 'off', 'beep', 'auxPowerOn', 'auxPowerOff', 'status', 'chargeSong', 'ironManSong', 'mario11', 'mario12', 'marioOver', 'statusCheck'].forEach(function(cmd) {
             self[cmd] = function() {
                 eventService.send(cmd, {});
             };
